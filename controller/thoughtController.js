@@ -38,7 +38,7 @@ module.exports = {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $set: req.body },
-            { runValidators: true, new: true }
+            // { runValidators: true, new: true }
         )
         .then((thought) => 
     !thought
@@ -51,14 +51,14 @@ module.exports = {
     });
     },
     deleteThought(req, res) {
-        Thought.FindOneAndRemove({ _id: req.params.thoughtId })
+        Thought.findOneAndDelete({ _id: req.params.thoughtId })
         .then((thought) =>
         !thought
         ? res.status(404).json({ message: 'No Thought with this ID found' })
         : User.findOneAndUpdate(
         { thoughts: req.params.thoughtId },
         { $pull: { thoughts: req.params.thoughtId } },
-        { new: true }
+        // { new: true }
     )
     )
     .then((user) =>
@@ -72,9 +72,9 @@ module.exports = {
 
     addThoughtReactions(req, res) {
         Thought.findOneAndUpdate(
-            { _id: res.params.thoughtId },
+            { _id: req.params.thoughtId },
             { $addToSet: { reactions: req.body } },
-            { runValidators: true, new: true }
+            // { runValidators: true, new: true }
         )
         .then((thought) =>
     !thought
@@ -86,7 +86,7 @@ module.exports = {
     removeThoughtReactions(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull: {reactions: req.params.reactionId } },
+            { $pull: {reactions: { _id: req.params.reactionId } } },
             { runValidators: true, new: true }
         )
         .then((thought) => 

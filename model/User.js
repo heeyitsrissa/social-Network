@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
     {
     username: { 
         type: String, 
@@ -12,7 +12,8 @@ const userSchema = new mongoose.Schema(
         type: String,
         required: true,
         unique: true,
-        validate: true,
+        // validate: true,
+        match: [/.+@.+\..+/, 'Please enter a valid e-mail address'],
     },
     thoughts: [{ type: Schema.Types.ObjectId, ref: 'thought' }],
     friends: [{ type: Schema.Types.ObjectId, ref: 'user' }]

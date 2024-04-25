@@ -7,8 +7,8 @@ module.exports = {
         .catch((err) => res.status(500).json(err));
     },
     getSingleUser(req, res) {
+        console.log('User ID:', req.params.userId);
         User.findOne({ _id: req.params.userId })
-        .select('__v')
         .then((user) => 
     !user
     ? res.status(404).json({ message: 'No user with that ID found' })
@@ -38,7 +38,7 @@ module.exports = {
     });
     },
     deleteUser(req, res) {
-        User.findOneAndRemove({ _id: req.params.userId })
+        User.findOneAndDelete({ _id: req.params.userId })
         .then((user) =>
     !user
     ? res.status(404).json({ message: 'No user with this ID found'})

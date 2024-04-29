@@ -38,16 +38,25 @@ module.exports = {
     });
     },
     deleteUser(req, res) {
-        User.findOneAndDelete({ _id: req.params.userId })
-        .then((user) =>
-    !user
-    ? res.status(404).json({ message: 'No user with this ID found'})
-    : User.findOneAndUpdate(
-        { _id: req.params.userId },
-        { $pull: { _id: req.params.userId } },
-        { new: true }
-    )
-    )
-    .catch((err) => res.status(500).json(err));
-    }
+        User.findOneAndDelete({ _id: req.params.userId }) 
+          .then((user) => {
+            if (!user) {
+              console.log('User not found'); 
+              return res.status(404).json({ message: 'No user with this ID found' });
+            }
+            return User.findOneAndUpdate(
+              { _id: req.params.userId },
+              { $pull: { _id: req.params.userId } },
+              { new: true }
+            );
+          })
+          .then((result) => {
+            console.log('Update result:', result); 
+            res.json({ message: 'User successfully deleted' }); 
+          })
+          .catch((err) => {
+            console.error('Error deleting user:', err);
+            res.status(500).json({ message: 'Error deleting user', error: err });
+          });
+      } 
 };
